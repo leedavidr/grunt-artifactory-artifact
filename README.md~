@@ -1,11 +1,11 @@
-# grunt-artifactory-artifact
-Forked from grunt-nexus-artifact https://github.com/RallySoftware/grunt-nexus-artifact
-> Download artifacts from JFrog Artifactory artifact repository.
-> Publish artifacts to a JFrog Artifactory artifact repository.
+# grunt-nexus-artifact
+
+> Download artifacts from a Nexus artifact repository.
+> Publish artifacts to a Nexus artifact repository.
 > Only works with Mac and Linux
 
 ## Why?
-If you're using grunt for frontend development and Java for the backend, it is convenient to consolidate dependencies into one repository.
+Nexus does really well with binary files. The idea is a repository can build and publish artifacts and other repositories can pull down those artifacts and extract them. Built files don't need to be committed to git, which take up most of the space in git repositories.
 
 ## Getting Started
 This plugin requires Grunt `~0.4.0`
@@ -13,14 +13,14 @@ This plugin requires Grunt `~0.4.0`
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
 
 ```shell
-npm install grunt-artifactory-artifact --save-dev
+npm install grunt-nexus-artifact --save-dev
 ```
 
 or add the following to your package.json file:
 ```js
 {
   "devDependencies": {
-    "grunt-artifactory-artifact": "0.2.0"
+    "grunt-nexus-artifact": "0.2.0"
   }
 }
 ```
@@ -28,17 +28,17 @@ or add the following to your package.json file:
 Once the plugin has been installed, enabled it inside your Gruntfile with this line of JavaScript:
 
 ```js
-grunt.loadNpmTasks('grunt-artifactory-artifact');
+grunt.loadNpmTasks('grunt-nexus-artifact');
 ```
 
-## Artifactory Fetch Task
-_Run this task with the `grunt artifactory:target:fetch` command._
+## Nexus Fetch Task
+_Run this task with the `grunt nexus:target:fetch` command._
 
 ### Examples
 ```js
-artifactory: {
+nexus: {
   client: {
-    url: 'http://artifactory.google.com:8080',
+    url: 'http://nexus.google.com:8080',
     repository: 'jslibraries',
     fetch: [
       { id: 'com.google.js:jquery:tgz:1.8.0', path: 'public/lib/jquery' }
@@ -47,11 +47,11 @@ artifactory: {
 }
 ```
 
-In grunt, options cascade. If all of your artifacts come from the same artifactory server, you can do the following:
+In grunt, options cascade. If all of your artifacts come from the same nexus server, you can do the following:
 ```js
-artifactory: {
+nexus: {
   options: {
-    url: 'http://artifactory.google.com:8080'
+    url: 'http://nexus.google.com:8080'
   },
   client: {
     options: {
@@ -80,7 +80,7 @@ There are a number of options available.
 #### url
 Type: `String`
 
-This defines the url of your artifactory repository. This should be the base URL plus port. Ex: `http://your-artifactory-repository:8080`
+This defines the url of your nexus repository. This should be the base URL plus port. Ex: `http://your-nexus-repository:8080`
 
 #### repository
 Type: `String`
@@ -90,7 +90,7 @@ This defines the name of the repository. _Since this task uses the REST API, the
 #### fetch
 Type: `Array{Object}`
 
-This defines an array of artifactory artifacts to be retrieved from artifactory. Each artifact has config options:
+This defines an array of nexus artifacts to be retrieved from nexus. Each artifact has config options:
 
 ##### group_id
 Type: `String`
@@ -128,15 +128,15 @@ Type: `String`
 
 This defines the path where the artifact will be extracted to. Ex: `public/lib/jquery`
 
-## Artifactory publish task
-The publish flag will run the publish config to push artifacts up to artifactory. It uses [grunt-contrib-compress](https://github.com/gruntjs/grunt-contrib-compress) so the file configuration will be the same.
+## Nexus publish task
+The publish flag will run the publish config to push artifacts up to nexus. It uses [grunt-contrib-compress](https://github.com/gruntjs/grunt-contrib-compress) so the file configuration will be the same.
 _Run this task with the `grunt nexus:target:publish` command._
 
 ### Examples
 ```js
-artifactory: {
+nexus: {
   options: {
-    url: 'http://artifactory.google.com:8080',
+    url: 'http://nexus.google.com:8080',
     repository: 'jslibraries'
   },
   client: {
@@ -178,5 +178,4 @@ There are some differences from the config on `grunt-contrib-compress`. First of
 
 ----
 
-Original grunt-nexus-artifact contributed by Nicholas Boll of [Rally Software](http://rallysoftware.com)
-Forked grunt-artifactory-artifact contributed by David R. Lee (http://www.twitter.com/david_r_lee)
+Contributed by Nicholas Boll of [Rally Software](http://rallysoftware.com)
