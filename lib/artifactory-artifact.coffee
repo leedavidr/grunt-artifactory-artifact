@@ -1,9 +1,9 @@
 
-module.exports = (grunt) -> class NexusArtifact
+module.exports = (grunt) -> class ArtifactoryArtifact
 
 	_ = grunt.util._
 
-	# If an ID string is provided, this will return a config object suitable for creation of a NexusArtifact object
+	# If an ID string is provided, this will return a config object suitable for creation of an ArtifactoryArtifact object
 	@fromString = (idString) ->
 		config = {}
 		[config.group_id, config.name, config.ext, config.version] = idString.split(':')

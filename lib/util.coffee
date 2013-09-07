@@ -58,13 +58,23 @@ module.exports = (grunt) ->
 		if isFile
 			file = fs.createReadStream(data)
 			file.pipe(request)
-
+			
 			file.on 'end', ->
 				deferred.resolve()
 
 			file.on 'error', (error) ->
 				deferred.reject error
 
+			request.on 'response', (response) ->
+				if response.statusCode is 200
+                    deferred.resolve()
+			    else
+                    deferred.reject {message: 'Request received invalid status code: ' + response.statusCode}
+			request.on 'end', ->
+				deferred.resolve()
+			request.on 'close', ->
+				deferred.resolve()
+				
 			request.on 'error', (error) ->
 				deferred.reject error
 		else
@@ -81,8 +91,6 @@ module.exports = (grunt) ->
 			url = urlPath + filename
 			promises = [
 				upload options.path + filename, url, options.credentials
-				upload hashes.sha1, "#{url}.sha1", options.credentials, false
-				upload hashes.md5, "#{url}.md5", options.credentials, false
 			]
 
 			Q.all(promises).then () ->
@@ -120,8 +128,8 @@ module.exports = (grunt) ->
 	return {
 
 		###*
-		* Download an nexus artifact and extract it to a path
-		* @param {NexusArtifact} artifact The nexus artifact to download
+		* Download an artifactory artifact and extract it to a path
+		* @param {ArtifactoryArtifact} artifact The artifactory artifact to download
 		* @param {String} path The path the artifact should be extracted to
 		*
 		* @return {Promise} returns a Q promise to be resolved when the file is done downloading
@@ -146,9 +154,9 @@ module.exports = (grunt) ->
 			deferred.promise
 
 		###*
-		* Publish a path to nexus
-		* @param {NexusArtifact} artifact The nexus artifact to publish to nexus
-		* @param {String} path The path to publish to nexus
+		* Publish a path to artifactory
+		* @param {ArtifactoryArtifact} artifact The artifactory artifact to publish to artifactory
+		* @param {String} path The path to publish to artifactory
 		*
 		* @return {Promise} returns a Q promise to be resolved when the artifact is done being published
 		###
