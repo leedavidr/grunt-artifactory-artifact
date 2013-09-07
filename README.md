@@ -41,9 +41,11 @@ artifactory: {
   client: {
     url: 'http://artifactory.google.com:8080',
     repository: 'jslibraries',
-    fetch: [
-      { id: 'com.google.js:jquery:tgz:1.8.0', path: 'public/lib/jquery' }
-    ]
+    options: {
+	    fetch: [
+	      { id: 'com.google.js:jquery:tgz:1.8.0', path: 'public/lib/jquery' }
+	    ]
+    }
   }
 }
 ```
@@ -56,19 +58,19 @@ artifactory: {
   },
   client: {
     options: {
-      repository: 'jslibraries'
-    },
-    fetch: [
-      { id: 'com.google.js:jquery:tgz:1.8.0', path: 'public/lib/jquery' }
-    ]
+      repository: 'jslibraries',
+      fetch: [
+        { id: 'com.google.js:jquery:tgz:1.8.0', path: 'public/lib/jquery' }
+      ]
+    }
   },
   build: {
     options: {
-      repository: 'jstools'
-    },
-    fetch: [
-      { id: 'com.google.js:closure:tgz:0.1.0', path: 'tools/closure' }
-    ]
+      repository: 'jstools',
+      fetch: [
+        { id: 'com.google.js:closure:tgz:0.1.0', path: 'tools/closure' }
+      ]
+    }
   }
 }
 ```
