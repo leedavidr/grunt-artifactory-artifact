@@ -1,5 +1,6 @@
 # grunt-artifactory-artifact
 Forked from grunt-nexus-artifact https://github.com/RallySoftware/grunt-nexus-artifact
+Slightly enhanced error handling, added authentication and defaults to artifactory context paths
 > Download artifacts from JFrog Artifactory artifact repository.
 > Publish artifacts to a JFrog Artifactory artifact repository.
 > Only works with Mac and Linux
