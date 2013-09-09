@@ -28,11 +28,11 @@ module.exports = (grunt) ->
 
 					if err
 						deferred.reject err
-				return
+						return
 
-				grunt.file.write "#{path}/.version", artifact.version
+					grunt.file.write "#{path}/.version", artifact.version
+					deferred.resolve()
 
-				deferred.resolve()
 		).pipe(file)
 
 		deferred.promise
