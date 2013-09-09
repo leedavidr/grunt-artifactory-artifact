@@ -1,4 +1,3 @@
-http = require 'http'
 request = require 'request'
 fs = require 'fs'
 Q = require 'q'
@@ -12,37 +11,29 @@ module.exports = (grunt) ->
 	downloadFile = (artifact, path, temp_path) ->
 		deferred = Q.defer()
 
-		# http.get artifact.buildUrl(), (res) ->
+		file = fs.createWriteStream(temp_path)
 
-		# 	file = fs.createWriteStream temp_path
-		# 	res.pipe file
-
-		# 	res.on 'error', (error) -> deferred.reject (error)
-		# 	file.on 'error', (error) -> deferred.reject (error)
-
-		# 	res.on 'end', ->
-		grunt.util.spawn
-			cmd: 'curl'
-			args: "-o #{temp_path} #{artifact.buildUrl()}".split(' ')
-		, (err, stdout, stderr) ->
-			if err
-				deferred.reject err
-				return
-
-			grunt.util.spawn
-				cmd: 'tar'
-				args: "zxf #{temp_path} -C #{path}".split(' ')
-			, (err, stdout, stderr) ->
+		request.get(artifact.buildUrl(), (error, response) ->
+			if error
+				deferred.reject {message: 'Error making http request: ' + error}
+			else if response.statusCode isnt 200
+				deferred.reject {message: 'Request received invalid status code: ' + response.statusCode}
+			else
+				grunt.util.spawn
+					cmd: 'tar'
+					args: "zxf #{temp_path} -C #{path}".split(' ')
+				, (err, stdout, stderr) ->
 
 					grunt.file.delete temp_path
 
 					if err
 						deferred.reject err
-						return
+				return
 
-					grunt.file.write "#{path}/.version", artifact.version
+				grunt.file.write "#{path}/.version", artifact.version
 
-					deferred.resolve()
+				deferred.resolve()
+		).pipe(file)
 
 		deferred.promise
 
