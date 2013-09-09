@@ -1,4 +1,5 @@
 http = require 'http'
+request = require 'request'
 fs = require 'fs'
 Q = require 'q'
 crypto = require 'crypto'
@@ -31,8 +32,7 @@ module.exports = (grunt) ->
 			grunt.util.spawn
 				cmd: 'tar'
 				args: "zxf #{temp_path} -C #{path}".split(' ')
-			,
-				(err, stdout, stderr) ->
+			, (err, stdout, stderr) ->
 
 					grunt.file.delete temp_path
 
@@ -49,36 +49,23 @@ module.exports = (grunt) ->
 	upload = (data, url, credentials, isFile = true) ->
 		deferred = Q.defer()
 
-		options = grunt.util._.extend urlUtil.parse(url), {method: 'PUT'}
+		options = grunt.util._.extend {method: 'PUT', url: url}
 		if credentials.username
-			options = grunt.util._.extend options, {auth: credentials.username + ":" + credentials.password}
-		
-		request = http.request options
+			options = grunt.util._.extend options, {auth: credentials}
+
+		grunt.verbose.writeflags options
 
 		if isFile
 			file = fs.createReadStream(data)
-			file.pipe(request)
-			
-			file.on 'end', ->
-				deferred.resolve()
-
-			file.on 'error', (error) ->
-				deferred.reject error
-
-			request.on 'response', (response) ->
-				if response.statusCode is 200
-                    deferred.resolve()
-			    else
-                    deferred.reject {message: 'Request received invalid status code: ' + response.statusCode}
-			request.on 'end', ->
-				deferred.resolve()
-			request.on 'close', ->
-				deferred.resolve()
-				
-			request.on 'error', (error) ->
-				deferred.reject error
+			file.pipe(request.put(options, (error, response) ->
+				if error
+					deferred.reject {message: 'Error making http request: ' + error}
+				else if response.statusCode is 201
+					deferred.resolve()
+				else
+					deferred.reject {message: 'Request received invalid status code: ' + response.statusCode}
+			))
 		else
-			request.end data
 			deferred.resolve()
 
 		deferred.promise
