@@ -22,7 +22,8 @@
   "dependencies": {
     "q": "0.9.3",
     "grunt": "~0.4.1",
-    "grunt-contrib-compress": "~0.5.2"
+    "grunt-contrib-compress": "~0.5.2",
+    "request": "~2.27.0"
   },
   "readme": "# grunt-artifactory-artifact\n\n> Forked from grunt-nexus-artifact by Nicholas Boll\n",
   "readmeFilename": "README.md",
