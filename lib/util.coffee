@@ -1,4 +1,5 @@
 request = require 'request'
+targz = require 'tar.gz'
 fs = require 'fs'
 Q = require 'q'
 crypto = require 'crypto'
@@ -19,20 +20,11 @@ module.exports = (grunt) ->
 			else if response.statusCode isnt 200
 				deferred.reject {message: 'Request received invalid status code: ' + response.statusCode}
 			else
-				grunt.util.spawn
-					cmd: 'tar'
-					args: "zxf #{temp_path} -C #{path}".split(' ')
-				, (err, stdout, stderr) ->
-
-					grunt.file.delete temp_path
-
-					if err
-						deferred.reject err
-						return
-
-					grunt.file.write "#{path}/.version", artifact.version
-					deferred.resolve()
-
+				new targz().extract(temp_path, path, (err) ->
+					if(err)
+						deferred.reject { message: 'Error extracting archive' + err }
+					deferred.resolve
+				);
 		).pipe(file)
 
 		deferred.promise
