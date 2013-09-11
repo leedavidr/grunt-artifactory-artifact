@@ -17,7 +17,7 @@ module.exports = (grunt) ->
 			new targz().extract(temp_path, path, (err) ->
 				if(err)
 					deferred.reject { message: 'Error extracting archive' + err }
-				deferred.resolve
+				deferred.resolve()
 			)
 
 		request.get(artifact.buildUrl(), (error, response) ->
