@@ -15,6 +15,7 @@ module.exports = (grunt) ->
 		file = fs.createWriteStream(temp_path)
 
 		request.get(artifact.buildUrl(), (error, response) ->
+			file.end
 			if error
 				deferred.reject {message: 'Error making http request: ' + error}
 			else if response.statusCode isnt 200
