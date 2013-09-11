@@ -13,6 +13,12 @@ module.exports = (grunt) ->
 		deferred = Q.defer()
 
 		file = fs.createWriteStream(temp_path)
+		file.on 'finish', () ->
+			new targz().extract(temp_path, path, (err) ->
+				if(err)
+					deferred.reject { message: 'Error extracting archive' + err }
+				deferred.resolve
+			)
 
 		request.get(artifact.buildUrl(), (error, response) ->
 			file.end
@@ -20,12 +26,6 @@ module.exports = (grunt) ->
 				deferred.reject {message: 'Error making http request: ' + error}
 			else if response.statusCode isnt 200
 				deferred.reject {message: 'Request received invalid status code: ' + response.statusCode}
-			else
-				new targz().extract(temp_path, path, (err) ->
-					if(err)
-						deferred.reject { message: 'Error extracting archive' + err }
-					deferred.resolve
-				);
 		).pipe(file)
 
 		deferred.promise
