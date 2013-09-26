@@ -1,5 +1,6 @@
 request = require 'request'
 targz = require 'tar.gz'
+zip = require 'adm-zip'
 fs = require 'fs'
 Q = require 'q'
 crypto = require 'crypto'
@@ -9,16 +10,25 @@ module.exports = (grunt) ->
 
 	compress = require('grunt-contrib-compress/tasks/lib/compress')(grunt)
 
-	downloadFile = (artifact, path, temp_path) ->
-		deferred = Q.defer()
-
-		file = fs.createWriteStream(temp_path)
-		file.on 'finish', () ->
+	extract = (ext, temp_path, path, deferred) ->
+		if ext is 'tgz'
 			new targz().extract(temp_path, path, (err) ->
 				if(err)
 					deferred.reject { message: 'Error extracting archive' + err }
 				deferred.resolve()
 			)
+
+		if ext is 'zip'
+			archive = new zip(temp_path)
+			archive.extractAllTo(path, true);
+			deferred.resolve()
+
+	downloadFile = (artifact, path, temp_path) ->
+		deferred = Q.defer()
+
+		file = fs.createWriteStream(temp_path)
+		file.on 'finish', () ->
+			extract artifact.ext, temp_path, path, deferred
 
 		request.get(artifact.buildUrl(), (error, response) ->
 			file.end
