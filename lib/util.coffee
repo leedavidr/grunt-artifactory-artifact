@@ -145,10 +145,15 @@ module.exports = (grunt) ->
 			deferred = Q.defer()
 			filename = artifact.buildArtifactUri()
 			archive = "#{options.path}#{filename}"
+			
+			if(grunt.util._.endsWith(archive, '.war'))
+				mode = 'zip'
+			else
+				mode = compress.autoDetectMode(archive)
 
 			compress.options =
 				archive: archive
-				mode: compress.autoDetectMode(archive)
+				mode: mode
 
 			compress.tar files, () ->
 				publishFile(options, filename, artifact.buildUrlPath()).then( ->
