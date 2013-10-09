@@ -23,14 +23,14 @@ module.exports = (grunt) ->
 			archive.extractAllTo(path, true);
 			deferred.resolve()
 
-	downloadFile = (artifact, path, temp_path) ->
+	downloadFile = (options, artifact, path, temp_path) ->
 		deferred = Q.defer()
 
 		file = fs.createWriteStream(temp_path)
 		file.on 'finish', () ->
 			extract artifact.ext, temp_path, path, deferred
 
-		request.get(artifact.buildUrl(), (error, response) ->
+		request.get(artifact.buildUrl(), options, (error, response) ->
 			file.end
 			if error
 				deferred.reject {message: 'Error making http request: ' + error}
@@ -115,7 +115,7 @@ module.exports = (grunt) ->
 		*
 		* @return {Promise} returns a Q promise to be resolved when the file is done downloading
 		###
-		download: (artifact, path) ->
+		download: (artifact, path, options) ->
 			deferred = Q.defer()
 
 			if grunt.file.exists("#{path}/.version") and (grunt.file.read("#{path}/.version").trim() is artifact.version)
@@ -127,7 +127,7 @@ module.exports = (grunt) ->
 			temp_path = "#{path}/#{artifact.buildArtifactUri()}"
 			grunt.log.writeln "Downloading #{artifact.buildUrl()}"
 
-			downloadFile(artifact, path, temp_path).then( ->
+			downloadFile(options, artifact, path, temp_path).then( ->
 				deferred.resolve()
 			).fail (error) ->
 				deferred.reject error
