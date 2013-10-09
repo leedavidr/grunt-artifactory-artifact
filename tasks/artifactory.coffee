@@ -30,8 +30,11 @@ module.exports = (grunt) ->
 				_.extend cfg, options
 
 				artifact = new ArtifactoryArtifact cfg
+				reqOpts = {}
+				if(options.username)
+				  reqOpts = {'auth':{'user':options.username, 'pass':options.password}}
 
-				processes.push util.download(artifact, cfg.path)
+				processes.push util.download(artifact, cfg.path, reqOpts)
 
 		if @args.length and _.contains @args, 'publish'
 			_.each options.publish, (cfg) =>
