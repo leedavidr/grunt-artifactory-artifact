@@ -131,16 +131,22 @@ Type: `String`
 
 This defines the path where the artifact will be extracted to. Ex: `public/lib/jquery`
 
+## Artifactory package task
+The package flag will run the `publish` config to package artifacts. It uses [grunt-contrib-compress](https://github.com/gruntjs/grunt-contrib-compress) so the file configuration will be the same.
+_Run this task with the `grunt artifactory:target:package` command._
+
 ## Artifactory publish task
-The publish flag will run the publish config to push artifacts up to artifactory. It uses [grunt-contrib-compress](https://github.com/gruntjs/grunt-contrib-compress) so the file configuration will be the same.
-_Run this task with the `grunt nexus:target:publish` command._
+The publish flag will run the publish config to package and push artifacts up to artifactory. It uses [grunt-contrib-compress](https://github.com/gruntjs/grunt-contrib-compress) so the file configuration will be the same.
+_Run this task with the `grunt artifactory:target:publish` command._
 
 ### Examples
 ```js
 artifactory: {
   options: {
     url: 'http://artifactory.google.com:8080',
-    repository: 'jslibraries'
+    repository: 'jslibraries',
+    username: 'admin',
+    password: 'admin123'
   },
   client: {
     files: [
@@ -150,9 +156,7 @@ artifactory: {
       publish: [{
           id: 'com.mycompany.js:built-artifact:tgz',
           version: 'my-version', 
-          path: 'dist/',
-          username: 'admin',
-          password: 'admin123'
+          path: 'dist/'
       }]
     }
   }
@@ -172,6 +176,8 @@ This defines the temporary path for the compressed artifact.
 
 #### files
 Type `Array`
+
+
 
 This parameter comes from `grunt-contrib-compress`. You can read about it at [github.com/gruntjs/grunt-contrib-compress](https://github.com/gruntjs/grunt-contrib-compress).
 There are some differences from the config on `grunt-contrib-compress`. First of all, `ext` is used from the artifact, so it doesn't need to be specified. `mode` is currently not supported. It will auto-configure based on the extension.

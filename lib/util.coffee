@@ -143,13 +143,13 @@ module.exports = (grunt) ->
     deferred.promise
 
   ###*
-  * Publish a path to artifactory
+  * Package a path to artifact
   * @param {ArtifactoryArtifact} artifact The artifactory artifact to publish to artifactory
   * @param {String} path The path to publish to artifactory
   *
-  * @return {Promise} returns a Q promise to be resolved when the artifact is done being published
+  * @return {Promise} returns a Q promise to be resolved when the artifact is done being packed
   ###
-  publish: (artifact, files, options) ->
+  package: (artifact, files, options) ->
     deferred = Q.defer()
     filename = artifact.buildArtifactUri()
     archive = "#{options.path}#{filename}"
@@ -164,10 +164,20 @@ module.exports = (grunt) ->
       mode: mode
 
     compress.tar files, () ->
-      publishFile(options, filename, artifact.buildUrlPath()).then( ->
-        deferred.resolve()
-      ).fail (error) ->
-        deferred.reject error
+      deferred.resolve()
 
     deferred.promise
+
+
+  ###*
+  * Publish a path to artifactory
+  * @param {ArtifactoryArtifact} artifact The artifactory artifact to publish to artifactory
+  * @param {Object} extra options
+  *
+  * @return {Promise} returns a Q promise to be resolved when the artifact is done being published
+  ###
+  publish: (artifact, options) ->
+    filename = artifact.buildArtifactUri()
+
+    return publishFile(options, filename, artifact.buildUrlPath())
   }
