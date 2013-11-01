@@ -21,9 +21,12 @@ module.exports = (grunt) ->
         deferred.resolve()
       )
 
-    if ext is 'zip'
+    else if ext is 'zip'
       archive = new zip(temp_path)
       archive.extractAllTo(path, true);
+      deferred.resolve()
+
+    else
       deferred.resolve()
 
   downloadFile = (options, artifact, path, temp_path) ->
