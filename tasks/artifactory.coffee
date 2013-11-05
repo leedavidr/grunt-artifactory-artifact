@@ -62,7 +62,7 @@ module.exports = (grunt) ->
                 deferred.reject(err)
         .fail (err) ->
             deferred.reject(err)
-        processes.push deferred
+        processes.push deferred.promise
 
     Q.all(processes).then(() ->
       done()
