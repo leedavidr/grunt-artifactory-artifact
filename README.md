@@ -42,9 +42,9 @@ artifactory: {
     url: 'http://artifactory.google.com:8080',
     repository: 'jslibraries',
     options: {
-	    fetch: [
-	      { id: 'com.google.js:jquery:tgz:1.8.0', path: 'public/lib/jquery' }
-	    ]
+      fetch: [
+        { id: 'com.google.js:jquery:tgz:1.8.0', path: 'public/lib/jquery' }
+      ]
     }
   }
 }
@@ -110,6 +110,11 @@ Type: `String`
 
 This defines the extension of the artifact. Ex: `tgz`
 
+##### classifier
+Type: `String`
+
+This defines the optional classifier to the artifact name. Ex: `javadoc`
+
 ##### version
 Type: `String`
 
@@ -118,8 +123,8 @@ This defines the version of the artifact. Ex: `1.8.0`
 ##### id
 Type: `String`
 
-This is a shorthand for `group_id`, `name`, `ext` and `version`. This defines the id string of the artifact in the following format:
-```{group_id}:{name}:{ext}:{version}```
+This is a shorthand for `group_id`, `name`, `ext`, `version` and optionally a `classifier`. This defines the id string of the artifact in the following format:
+```{group_id}:{name}:{ext}:[{classifier}:]{version}```
 
 Ex:
 ```

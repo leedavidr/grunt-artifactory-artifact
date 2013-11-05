@@ -4,16 +4,26 @@ module.exports = (grunt) -> class ArtifactoryArtifact
 	_ = grunt.util._
 
 	# If an ID string is provided, this will return a config object suitable for creation of an ArtifactoryArtifact object
+	# ID made from group_id:name:ext:{classifier:}version
 	@fromString = (idString) ->
 		config = {}
-		[config.group_id, config.name, config.ext, config.version] = idString.split(':')
+		parts = idString.split(':')
+		if parts.length == 4
+			parts.splice(3, 0, '')
+		[config.group_id, config.name, config.ext, config.classifier, config.version] = parts
 		return config
 
 	constructor: (config) ->
-		{@url, @base_path, @repository, @group_id, @name, @version, @ext, @versionPattern} = config
+		{@url, @base_path, @repository, @group_id, @name, @classifier, @version, @ext, @versionPattern} = config
 
 	toString: () ->
-		[@group_id, @name, @ext, @version].join(':')
+		parts = [@group_id, @name, @ext, @version]
+		if @classifier
+			parts.splice(3, 0, @classifier)
+		parts.join(':')
+
+	dashClassifier: () ->
+	 	if @classifier then "-#{@classifier}" else ''
 
 	buildUrlPath: () ->
 		_.compact(_.flatten([
@@ -29,5 +39,5 @@ module.exports = (grunt) -> class ArtifactoryArtifact
 		"#{@buildUrlPath()}#{@buildArtifactUri()}"
 
 	buildArtifactUri: () ->
-		@versionPattern.replace /%([ave])/g, ($0, $1) =>
-			{ a: @name, v: @version, e: @ext}[$1]
+		@versionPattern.replace /%([avce])/g, ($0, $1) =>
+			{ a: @name, v: @version, c: @dashClassifier(), e: @ext }[$1]
