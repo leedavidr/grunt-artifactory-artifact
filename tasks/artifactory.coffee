@@ -16,7 +16,7 @@ module.exports = (grunt) ->
       url: ''
       base_path: 'artifactory'
       repository: ''
-      versionPattern: '%a-%v.%e'
+      versionPattern: '%a-%v%c.%e'
       username: ''
       password: ''
 
