@@ -156,7 +156,7 @@ artifactory: {
   client: {
     files: [
       { src: ['builds/**/*'] }
-    ]
+    ],
     options: {
       publish: [{
           id: 'com.mycompany.js:built-artifact:tgz',
