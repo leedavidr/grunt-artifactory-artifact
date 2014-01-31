@@ -21,7 +21,7 @@ module.exports = (grunt) ->
         deferred.resolve()
       )
 
-    else if ext is 'zip'
+    else if ext in ['zip','jar']
       archive = new zip(temp_path)
       archive.extractAllTo(path, true);
       deferred.resolve()
@@ -29,7 +29,7 @@ module.exports = (grunt) ->
     else
       deferred.resolve()
 
-  downloadFile = (options, artifact, path, temp_path) ->
+  downloadFile = (options, artifact, path, temp_path, decompress) ->
     deferred = Q.defer()
 
     grunt.log.writeln "Downloading #{artifact.buildUrl()}"
@@ -45,7 +45,7 @@ module.exports = (grunt) ->
 
     file.on 'close', ()->
       grunt.verbose.writeln "Start Extracting..."
-      extract artifact.ext, temp_path, path, deferred
+      extract artifact.ext, temp_path, path, deferred if decompress
 
     grunt.verbose.writeln "Downloading ..."
     deferred.promise
@@ -125,7 +125,7 @@ module.exports = (grunt) ->
   *
   * @return {Promise} returns a Q promise to be resolved when the file is done downloading
   ###
-  download: (artifact, path, options) ->
+  download: (artifact, path, options, decompress) ->
     deferred = Q.defer()
 
     if grunt.file.exists("#{path}/.version") and (grunt.file.read("#{path}/.version").trim() is artifact.version)
@@ -136,11 +136,12 @@ module.exports = (grunt) ->
 
     temp_path = "#{path}/#{artifact.buildArtifactUri()}"
 
-    downloadFile(options, artifact, path, temp_path).then( ->
-      grunt.log.writeln "Download and unpack done."
+    unpack = "and unpack " if decompress
+    downloadFile(options, artifact, path, temp_path, decompress).then( ->
+      grunt.log.writeln "Download #{unpack}done."
       deferred.resolve()
     ).fail (error) ->
-      grunt.log.writeln "Download and unpack Error: #{error}"
+      grunt.log.writeln "Download #{unpack}Error: #{error}"
       deferred.reject error
 
     deferred.promise
