@@ -9,6 +9,8 @@ urlUtil = require 'url'
 module.exports = (grunt) ->
 
   compress = require('grunt-contrib-compress/tasks/lib/compress')(grunt)
+  _ = require('lodash')
+  _s = require('underscore.string');
 
   extract = (ext, temp_path, path, deferred) ->
     grunt.verbose.writeln "Extract #{ext} #{temp_path}, #{path}"
@@ -53,9 +55,9 @@ module.exports = (grunt) ->
   upload = (data, url, credentials, isFile = true) ->
     deferred = Q.defer()
 
-    options = grunt.util._.extend {method: 'PUT', url: url}
+    options = _.assign {method: 'PUT', url: url}
     if credentials.username
-      options = grunt.util._.extend options, {auth: credentials}
+      options = _.assign options, {auth: credentials}
 
     grunt.verbose.writeflags options
 
@@ -158,7 +160,7 @@ module.exports = (grunt) ->
     filename = artifact.buildArtifactUri()
     archive = "#{options.path}#{filename}"
 
-    if(grunt.util._.endsWith(archive, '.war'))
+    if(_s.endsWith(archive, '.war'))
       mode = 'zip'
     else
       mode = compress.autoDetectMode(archive)
