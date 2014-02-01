@@ -125,7 +125,7 @@ module.exports = (grunt) ->
   *
   * @return {Promise} returns a Q promise to be resolved when the file is done downloading
   ###
-  download: (artifact, path, options, decompress) ->
+  download: (artifact, path, options, decompress = on) ->
     deferred = Q.defer()
 
     if grunt.file.exists("#{path}/.version") and (grunt.file.read("#{path}/.version").trim() is artifact.version)

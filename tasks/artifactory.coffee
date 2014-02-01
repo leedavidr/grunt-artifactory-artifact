@@ -33,8 +33,7 @@ module.exports = (grunt) ->
         reqOpts = {}
         if(options.username)
           reqOpts = {'auth':{'user':options.username, 'pass':options.password}}
-
-        processes.push util.download(artifact, cfg.path, reqOpts, cfg.decompress = on)
+        processes.push util.download(artifact, cfg.path, reqOpts, cfg.decompress)
 
     if @args.length and _.contains @args, 'package'
       _.each options.publish, (cfg) =>
