@@ -1,7 +1,8 @@
 
 module.exports = (grunt) -> class ArtifactoryArtifact
 
-	_ = grunt.util._
+	_ = require('lodash')
+
 
 	# If an ID string is provided, this will return a config object suitable for creation of an ArtifactoryArtifact object
 	# ID made from group_id:name:ext:{classifier:}version

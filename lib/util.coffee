@@ -9,6 +9,8 @@ urlUtil = require 'url'
 module.exports = (grunt) ->
 
   compress = require('grunt-contrib-compress/tasks/lib/compress')(grunt)
+  _ = require('lodash')
+  _s = require('underscore.string');
 
   extract = (ext, temp_path, path, deferred) ->
     grunt.verbose.writeln "Extract #{ext} #{temp_path}, #{path}"
@@ -21,7 +23,7 @@ module.exports = (grunt) ->
         deferred.resolve()
       )
 
-    else if ext is 'zip'
+    else if ext in ['zip','jar']
       archive = new zip(temp_path)
       archive.extractAllTo(path, true);
       deferred.resolve()
@@ -29,7 +31,7 @@ module.exports = (grunt) ->
     else
       deferred.resolve()
 
-  downloadFile = (options, artifact, path, temp_path) ->
+  downloadFile = (options, artifact, path, temp_path, decompress) ->
     deferred = Q.defer()
 
     grunt.log.writeln "Downloading #{artifact.buildUrl()}"
@@ -45,7 +47,7 @@ module.exports = (grunt) ->
 
     file.on 'close', ()->
       grunt.verbose.writeln "Start Extracting..."
-      extract artifact.ext, temp_path, path, deferred
+      extract artifact.ext, temp_path, path, deferred if decompress
 
     grunt.verbose.writeln "Downloading ..."
     deferred.promise
@@ -53,9 +55,9 @@ module.exports = (grunt) ->
   upload = (data, url, credentials, isFile = true) ->
     deferred = Q.defer()
 
-    options = grunt.util._.extend {method: 'PUT', url: url}
+    options = _.assign {method: 'PUT', url: url}
     if credentials.username
-      options = grunt.util._.extend options, {auth: credentials}
+      options = _.assign options, {auth: credentials}
 
     grunt.verbose.writeflags options
 
@@ -125,7 +127,7 @@ module.exports = (grunt) ->
   *
   * @return {Promise} returns a Q promise to be resolved when the file is done downloading
   ###
-  download: (artifact, path, options) ->
+  download: (artifact, path, options, decompress = on) ->
     deferred = Q.defer()
 
     if grunt.file.exists("#{path}/.version") and (grunt.file.read("#{path}/.version").trim() is artifact.version)
@@ -136,11 +138,12 @@ module.exports = (grunt) ->
 
     temp_path = "#{path}/#{artifact.buildArtifactUri()}"
 
-    downloadFile(options, artifact, path, temp_path).then( ->
-      grunt.log.writeln "Download and unpack done."
+    unpack = "and unpack " if decompress
+    downloadFile(options, artifact, path, temp_path, decompress).then( ->
+      grunt.log.writeln "Download #{unpack}done."
       deferred.resolve()
     ).fail (error) ->
-      grunt.log.writeln "Download and unpack Error: #{error}"
+      grunt.log.writeln "Download #{unpack}Error: #{error}"
       deferred.reject error
 
     deferred.promise
@@ -157,7 +160,7 @@ module.exports = (grunt) ->
     filename = artifact.buildArtifactUri()
     archive = "#{options.path}#{filename}"
 
-    if(grunt.util._.endsWith(archive, '.war'))
+    if(_s.endsWith(archive, '.war'))
       mode = 'zip'
     else
       mode = compress.autoDetectMode(archive)

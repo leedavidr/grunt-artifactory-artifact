@@ -4,9 +4,8 @@ Q = require 'q'
 module.exports = (grunt) ->
   ArtifactoryArtifact = require('../lib/artifactory-artifact')(grunt)
   util = require('../lib/util')(grunt)
-
-  # shortcut to underscore
-  _ = grunt.util._
+  # shortcut to Lodash
+  _ = require('lodash')
 
   grunt.registerMultiTask 'artifactory', 'Download an artifact from artifactory', ->
     done = @async()
@@ -23,35 +22,34 @@ module.exports = (grunt) ->
     processes = []
 
     if !@args.length or _.contains @args, 'fetch'
-      _.each options.fetch, (cfg) ->
+      _.forEach options.fetch, (cfg) ->
         # get the base artifactory path
-        _.extend cfg, ArtifactoryArtifact.fromString(cfg.id) if cfg.id
+        _.assign cfg, ArtifactoryArtifact.fromString(cfg.id) if cfg.id
 
-        _.extend cfg, options
+        _.assign cfg, options
 
         artifact = new ArtifactoryArtifact cfg
         reqOpts = {}
         if(options.username)
           reqOpts = {'auth':{'user':options.username, 'pass':options.password}}
-
-        processes.push util.download(artifact, cfg.path, reqOpts)
+        processes.push util.download(artifact, cfg.path, reqOpts, cfg.decompress)
 
     if @args.length and _.contains @args, 'package'
-      _.each options.publish, (cfg) =>
+      _.forEach options.publish, (cfg) =>
         artifactCfg = {}
-        _.extend artifactCfg, ArtifactoryArtifact.fromString(cfg.id), cfg if cfg.id
+        _.assign artifactCfg, ArtifactoryArtifact.fromString(cfg.id), cfg if cfg.id
 
-        _.extend artifactCfg, options
+        _.assign artifactCfg, options
 
         artifact = new ArtifactoryArtifact artifactCfg
         processes.push util.package(artifact, @files, { path: cfg.path } )
 
     if @args.length and _.contains @args, 'publish'
-      _.each options.publish, (cfg) =>
+      _.forEach options.publish, (cfg) =>
         artifactCfg = {}
-        _.extend artifactCfg, ArtifactoryArtifact.fromString(cfg.id), cfg if cfg.id
+        _.assign artifactCfg, ArtifactoryArtifact.fromString(cfg.id), cfg if cfg.id
 
-        _.extend artifactCfg, options
+        _.assign artifactCfg, options
 
         artifact = new ArtifactoryArtifact artifactCfg
         deferred = Q.defer()
