@@ -52,10 +52,10 @@ module.exports = (grunt) ->
     grunt.verbose.writeln "Downloading ..."
     deferred.promise
 
-  upload = (data, url, credentials, isFile = true) ->
+  upload = (data, url, credentials, headers, isFile = true) ->
     deferred = Q.defer()
 
-    options = _.assign {method: 'PUT', url: url}
+    options = _.assign {method: 'PUT', url: url, headers: headers}
     if credentials.username
       options = _.assign options, {auth: credentials}
 
@@ -82,8 +82,9 @@ module.exports = (grunt) ->
     generateHashes(options.path + filename).then (hashes) ->
 
       url = urlPath + filename
+      headers = {"X-Checksum-Sha1": hashes.sha1, "X-Checksum-Md5": hashes.md5 }
       promises = [
-        upload options.path + filename, url, options.credentials
+        upload options.path + filename, url, options.credentials, headers
       ]
 
       Q.all(promises).then () ->
