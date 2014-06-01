@@ -1,6 +1,6 @@
 {
   "name": "grunt-artifactory-artifact",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "A grunt plugin that helps with simple artifactory artifacts",
   "main": "index.js",
   "scripts": {

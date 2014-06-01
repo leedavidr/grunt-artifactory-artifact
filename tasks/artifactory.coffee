@@ -25,7 +25,6 @@ module.exports = (grunt) ->
       _.forEach options.fetch, (cfg) ->
         # get the base artifactory path
         _.assign cfg, ArtifactoryArtifact.fromString(cfg.id) if cfg.id
-
         _.assign cfg, options
 
         artifact = new ArtifactoryArtifact cfg
@@ -37,9 +36,9 @@ module.exports = (grunt) ->
     if @args.length and _.contains @args, 'package'
       _.forEach options.publish, (cfg) =>
         artifactCfg = {}
-        _.assign artifactCfg, ArtifactoryArtifact.fromString(cfg.id), cfg if cfg.id
 
-        _.assign artifactCfg, options
+        _.assign artifactCfg, ArtifactoryArtifact.fromString(cfg.id) if cfg.id
+        _.assign artifactCfg, cfg, options
 
         artifact = new ArtifactoryArtifact artifactCfg
         processes.push util.package(artifact, @files, { path: cfg.path } )
@@ -47,9 +46,8 @@ module.exports = (grunt) ->
     if @args.length and _.contains @args, 'publish'
       _.forEach options.publish, (cfg) =>
         artifactCfg = {}
-        _.assign artifactCfg, ArtifactoryArtifact.fromString(cfg.id), cfg if cfg.id
-
-        _.assign artifactCfg, options
+        _.assign artifactCfg, ArtifactoryArtifact.fromString(cfg.id) if cfg.id
+        _.assign artifactCfg, cfg, options
 
         artifact = new ArtifactoryArtifact artifactCfg
         deferred = Q.defer()
