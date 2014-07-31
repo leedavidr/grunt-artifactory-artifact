@@ -52,7 +52,7 @@ module.exports = (grunt) ->
         artifact = new ArtifactoryArtifact artifactCfg
         deferred = Q.defer()
         util.package(artifact, @files, { path: cfg.path }).then () ->
-            util.publish(artifact, { path: cfg.path, credentials: { username: options.username, password: options.password }}).then ()->
+            util.publish(artifact, { path: cfg.path, credentials: { username: options.username, password: options.password }, parameters: options.parameters}).then ()->
                 deferred.resolve()
             .fail (err) ->
                 deferred.reject(err)
