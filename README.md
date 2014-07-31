@@ -187,7 +187,7 @@ This defines the temporary path for the compressed artifact.
 #### files
 Type `Array`
 
-### parameters
+#### parameters
 Type 'Array'
 
 This takes a list of parameters which will be listed in the file properties in Artifactory.
