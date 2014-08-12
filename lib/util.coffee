@@ -83,7 +83,7 @@ module.exports = (grunt) ->
 
       url = urlPath + filename
       length = fs.statSync(options.path + filename).size
-      headers = {"X-Checksum-Sha1": hashes.sha1, "X-Checksum-Md5": hashes.md5, "Content-Length": lenght}
+      headers = {"X-Checksum-Sha1": hashes.sha1, "X-Checksum-Md5": hashes.md5, "Content-Length": length}
       promises = [
         upload options.path + filename, url, options.credentials, headers
       ]
