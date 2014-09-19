@@ -186,7 +186,7 @@ module.exports = (grunt) ->
   ###
   publish: (artifact, options) ->
     filename = artifact.buildArtifactUri()
-    parameters = ';' + options.parameters.join(';')
+    parameters = if options.parameters then ';' + options.parameters.join(';') else ''
 
     return publishFile(options, filename, artifact.buildUrlPath(), parameters)
   }
