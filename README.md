@@ -162,7 +162,12 @@ artifactory: {
           id: 'com.mycompany.js:built-artifact:tgz',
           version: 'my-version', 
           path: 'dist/'
-      }]
+      }],
+      parameters: [
+        'build.name=built-artifact',
+        'version=my-version',
+        'vcs.revision=my-revision',
+      ]
     }
   }
 }
@@ -181,6 +186,11 @@ This defines the temporary path for the compressed artifact.
 
 #### files
 Type `Array`
+
+#### parameters
+Type 'Array'
+
+This takes a list of parameters which will be listed in the file properties in Artifactory.
 
 
 

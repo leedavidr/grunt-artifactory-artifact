@@ -76,12 +76,12 @@ module.exports = (grunt) ->
 
     deferred.promise
 
-  publishFile = (options, filename, urlPath) ->
+  publishFile = (options, filename, urlPath, parameters) ->
     deferred = Q.defer()
 
     generateHashes(options.path + filename).then (hashes) ->
 
-      url = urlPath + filename
+      url = urlPath + filename + parameters
       headers = {"X-Checksum-Sha1": hashes.sha1, "X-Checksum-Md5": hashes.md5 }
       promises = [
         upload options.path + filename, url, options.credentials, headers
@@ -185,6 +185,7 @@ module.exports = (grunt) ->
   ###
   publish: (artifact, options) ->
     filename = artifact.buildArtifactUri()
+    parameters = ';' + options.parameters.join(';')
 
-    return publishFile(options, filename, artifact.buildUrlPath())
+    return publishFile(options, filename, artifact.buildUrlPath(), parameters)
   }
