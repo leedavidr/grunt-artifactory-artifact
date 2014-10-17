@@ -143,7 +143,7 @@ module.exports = (grunt) ->
 
     temp_path = "#{path}/#{artifact.buildArtifactUri()}"
 
-    unpack = "and unpack " if decompress
+    unpack = if decompress then "and unpack " else ""
     downloadFile(options, artifact, path, temp_path, decompress).then( ->
       grunt.log.writeln "Download #{unpack}done."
       deferred.resolve()
