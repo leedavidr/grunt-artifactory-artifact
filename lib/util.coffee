@@ -46,8 +46,11 @@ module.exports = (grunt) ->
     ).pipe(fs.createWriteStream(temp_path))
 
     file.on 'close', ()->
-      grunt.verbose.writeln "Start Extracting..."
-      extract artifact.ext, temp_path, path, deferred if decompress
+      if decompress
+        grunt.verbose.writeln "Start Extracting..."
+        extract artifact.ext, temp_path, path, deferred
+      else
+        deferred.resolve()
 
     grunt.verbose.writeln "Downloading ..."
     deferred.promise
