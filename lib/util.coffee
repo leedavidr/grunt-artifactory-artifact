@@ -46,8 +46,11 @@ module.exports = (grunt) ->
     ).pipe(fs.createWriteStream(temp_path))
 
     file.on 'close', ()->
-      grunt.verbose.writeln "Start Extracting..."
-      extract artifact.ext, temp_path, path, deferred if decompress
+      if decompress
+        grunt.verbose.writeln "Start Extracting..."
+        extract artifact.ext, temp_path, path, deferred
+      else
+        deferred.resolve()
 
     grunt.verbose.writeln "Downloading ..."
     deferred.promise
@@ -140,7 +143,7 @@ module.exports = (grunt) ->
 
     temp_path = "#{path}/#{artifact.buildArtifactUri()}"
 
-    unpack = "and unpack " if decompress
+    unpack = if decompress then "and unpack " else ""
     downloadFile(options, artifact, path, temp_path, decompress).then( ->
       grunt.log.writeln "Download #{unpack}done."
       deferred.resolve()
