@@ -23,7 +23,7 @@ module.exports = (grunt) ->
         deferred.resolve()
       )
 
-    else if ext in ['zip','jar']
+    else if ext in ['zip','jar','war']
       archive = new zip(temp_path)
       archive.extractAllTo(path, true);
       deferred.resolve()
