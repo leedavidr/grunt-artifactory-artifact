@@ -195,7 +195,7 @@ This takes a list of parameters which will be listed in the file properties in A
 #### decompress
 Type 'Boolean'
 
-When 'true', the artifact will attempt to be decompressed. Defaults to 'true'.
+When 'true', the artifact will attempt to be decompressed. Defaults to 'true'. Currently supports extensions 'tgz','jar','zip', and 'war'.
 
 
 This parameter comes from `grunt-contrib-compress`. You can read about it at [github.com/gruntjs/grunt-contrib-compress](https://github.com/gruntjs/grunt-contrib-compress).
