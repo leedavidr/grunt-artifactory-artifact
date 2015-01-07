@@ -168,6 +168,7 @@ module.exports = (grunt) ->
     if(_s.endsWith(archive, '.war'))
       mode = 'zip'
     else
+      compress.options = {}
       mode = compress.autoDetectMode(archive)
 
     compress.options =
