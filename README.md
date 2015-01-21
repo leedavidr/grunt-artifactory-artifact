@@ -126,6 +126,11 @@ Type: `String`
 This is a shorthand for `group_id`, `name`, `ext`, `version` and optionally a `classifier`. This defines the id string of the artifact in the following format:
 ```{group_id}:{name}:{ext}:[{classifier}:]{version}```
 
+##### download_url
+Type: `String`
+
+If you have a custom URL scheme for your artifactory instance, you can specify a full-qualified URL for downloading an artifact. You still need to set the `ext` param for extraction purposes.
+
 Ex:
 ```
 com.google.js:jquery:tgz:1.8.0
