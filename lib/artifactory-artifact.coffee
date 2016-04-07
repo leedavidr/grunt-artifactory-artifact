@@ -42,8 +42,8 @@ module.exports = (grunt) -> class ArtifactoryArtifact
 		else
 			"#{@buildUrlPath()}#{@buildArtifactUri()}"
 
-  buildArtifactUri: () ->
-    if @archive
-    then @archive
-    else @versionPattern.replace /%([avce])/g, ($0, $1) =>
-      {a: @name, v: @version, c: @dashClassifier(), e: @ext}[$1]
+	buildArtifactUri: () ->
+		if @archive
+		then @archive
+		else @versionPattern.replace /%([avce])/g, ($0, $1) =>
+			{a: @name, v: @version, c: @dashClassifier(), e: @ext}[$1]
