@@ -22,7 +22,7 @@
   "dependencies": {
     "q": "0.9.3",
     "grunt": "~0.4.1",
-    "grunt-contrib-compress": "~0.13.0",
+    "grunt-contrib-compress": "~1.2.0",
     "request": "~2.27.0",
     "tar.gz": "~0.1.1",
     "adm-zip": "~0.4.3",
