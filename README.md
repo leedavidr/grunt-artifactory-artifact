@@ -164,6 +164,7 @@ artifactory: {
     ],
     options: {
       publish: [{
+          archive: 'my-custom-archive-name.tgz',
           id: 'com.mycompany.js:built-artifact:tgz',
           version: 'my-version', 
           path: 'dist/'
@@ -183,6 +184,11 @@ In this example the `id` config is used, but the version is dropped. It can be s
 ### Options
 
 The options listed here are new or repurposed for publish
+
+#### archive
+Type `String`
+
+This defines a custom name for the artifact archive.
 
 #### path
 Type `String`

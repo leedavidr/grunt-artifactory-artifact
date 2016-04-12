@@ -15,7 +15,7 @@ module.exports = (grunt) -> class ArtifactoryArtifact
 		return config
 
 	constructor: (config) ->
-		{@url, @base_path, @download_url, @repository, @group_id, @name, @classifier, @version, @ext, @versionPattern} = config
+		{@archive, @url, @base_path, @download_url, @repository, @group_id, @name, @classifier, @version, @ext, @versionPattern} = config
 
 	toString: () ->
 		parts = [@group_id, @name, @ext, @version]
@@ -43,5 +43,7 @@ module.exports = (grunt) -> class ArtifactoryArtifact
 			"#{@buildUrlPath()}#{@buildArtifactUri()}"
 
 	buildArtifactUri: () ->
-		@versionPattern.replace /%([avce])/g, ($0, $1) =>
-			{ a: @name, v: @version, c: @dashClassifier(), e: @ext }[$1]
+		if @archive
+		then @archive
+		else @versionPattern.replace /%([avce])/g, ($0, $1) =>
+			{a: @name, v: @version, c: @dashClassifier(), e: @ext}[$1]
