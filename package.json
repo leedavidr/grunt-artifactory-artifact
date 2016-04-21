@@ -1,6 +1,6 @@
 {
   "name": "grunt-artifactory-artifact",
-  "version": "0.8.0",
+  "version": "1.0.0",
   "description": "A grunt plugin that helps with simple artifactory artifacts",
   "main": "index.js",
   "scripts": {
@@ -16,12 +16,12 @@
   ],
   "author": {
     "name": "David Lee",
-    "email": "davidrlee@gmail.com"
+    "email": "david.lee@kastling.com"
   },
   "license": "MIT",
   "dependencies": {
     "q": "0.9.3",
-    "grunt": "~0.4.1",
+    "grunt": "~1.0.0",
     "grunt-contrib-compress": "~1.2.0",
     "request": "~2.27.0",
     "tar.gz": "~0.1.1",
