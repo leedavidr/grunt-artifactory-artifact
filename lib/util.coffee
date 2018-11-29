@@ -1,5 +1,5 @@
 request = require 'request'
-targz = require 'tar.gz'
+targz = require 'tar'
 zip = require 'adm-zip'
 fs = require 'fs'
 Q = require 'q'

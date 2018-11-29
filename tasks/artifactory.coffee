@@ -21,7 +21,7 @@ module.exports = (grunt) ->
 
     processes = []
 
-    if !@args.length or _.contains @args, 'fetch'
+    if !@args.length or _.includes @args, 'fetch'
       _.forEach options.fetch, (cfg) ->
         # get the base artifactory path
         _.assign cfg, ArtifactoryArtifact.fromString(cfg.id) if cfg.id
@@ -33,7 +33,7 @@ module.exports = (grunt) ->
           reqOpts = {'auth':{'user':options.username, 'pass':options.password}}
         processes.push util.download(artifact, cfg.path, reqOpts, cfg.decompress)
 
-    if @args.length and _.contains @args, 'package'
+    if @args.length and _.includes @args, 'package'
       _.forEach options.publish, (cfg) =>
         artifactCfg = {}
 
@@ -43,7 +43,7 @@ module.exports = (grunt) ->
         artifact = new ArtifactoryArtifact artifactCfg
         processes.push util.package(artifact, @files, { path: cfg.path } )
 
-    if @args.length and _.contains @args, 'publish'
+    if @args.length and _.includes @args, 'publish'
       _.forEach options.publish, (cfg) =>
         artifactCfg = {}
         _.assign artifactCfg, ArtifactoryArtifact.fromString(cfg.id) if cfg.id
