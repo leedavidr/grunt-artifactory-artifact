@@ -24,7 +24,7 @@ module.exports = (grunt) -> class ArtifactoryArtifact
 		parts.join(':')
 
 	dashClassifier: () ->
-	 	if @classifier then "-#{@classifier}" else ''
+		if @classifier then "-#{@classifier}" else ''
 
 	buildUrlPath: () ->
 		_.compact(_.flatten([
